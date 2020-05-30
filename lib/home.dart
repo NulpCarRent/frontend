@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -11,40 +10,65 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  RangeValues _values = RangeValues(0.3, 0.7);
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            Expanded(
+              flex: 3,
+              child: Container(
+                  padding: new EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Card(
+                          child: Padding(
+                        padding: new EdgeInsets.all(5),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Text("Price range"),
+                            RangeSlider(
+                              min: 0,
+                              max: 1,
+                              values: _values,
+                              onChanged: (RangeValues value) {},
+                            )
+                          ],
+                        ),
+                      )),
+                      Card(
+                        child: Padding(
+                        padding: new EdgeInsets.all(5),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                Checkbox(value: true),
+                                Text("Only available cars")
+                              ],
+                            )
+                          ],
+                        ),
+                      )),
+                    ],
+                  )),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Expanded(
+              flex: 8,
+              child: Container(),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
