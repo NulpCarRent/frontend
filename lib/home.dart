@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
+import 'api/api.dart';
+import 'api/car.dart';
+import 'widgets/car_list.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  HomePage({Key key, this.title, this.api}) : super(key: key);
 
   final String title;
+  final Api api;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   RangeValues _values = RangeValues(0.3, 0.7);
+  List<Car> cars = [];
+
+  Future<void> _updateList() async {
+    Data data;
+    //Get data from
+    try {
+      data = await widget.api.getTransports();
+      print(data.cars);
+    } catch (e) {
+      print(e.toString());
+    }
+    setState(() {
+      cars = data.cars;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _updateList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Expanded(
               flex: 8,
-              child: Container(),
+              child: CarList(cars),
             ),
           ],
         ),

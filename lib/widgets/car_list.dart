@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:frontend/api/api.dart';
+import 'package:frontend/api/car.dart';
+import "package:frontend/config/styles.dart";
 
-class CarCard extends StatelessWidget {
-  const CarCard({Key key}) : super(key: key);
+
+class CarList extends StatelessWidget {
+  List<Car> cars;
+
+  CarList(this.cars);
 
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(
-        itemCount: workers == null ? 0 : workers.length,
+        itemCount: cars == null ? 0 : cars.length,
         itemBuilder: (BuildContext context, int index) {
           return new Container(
               child: new Center(
@@ -19,7 +25,7 @@ class CarCard extends StatelessWidget {
               //     context,
               //     MaterialPageRoute(
               //       builder: (context) => new DetailsPage(
-              //         worker: workers[index],
+              //         worker: cars[index],
               //       ),
               //     ),
               //   ),
@@ -27,7 +33,8 @@ class CarCard extends StatelessWidget {
                 new Card(
                     child: new Column(
                   children: <Widget>[
-                    Image.network(workers[index].imageLink),
+                    //TODO Hardcoded image link
+                    Image.network("https://media.wired.com/photos/5d09594a62bcb0c9752779d9/125:94/w_1994,h_1500,c_limit/Transpo_G70_TA-518126.jpg"),
                     Padding(
                       padding: Styles.cardPadding,
                       child: Column(
@@ -37,14 +44,14 @@ class CarCard extends StatelessWidget {
                           Padding(
                             padding: Styles.cardHeadPadding,
                             child: Text(
-                              workers[index].transportName,
+                              cars[index].name,
                               style: Styles.primaryCardText,
                               textAlign: TextAlign.center,
                             ),
                           ),
                           Text("TransportID: " +
-                              workers[index].transportId.toString()),
-                          Text("MineID: " + workers[index].mineId.toString()),
+                              cars[index].id.toString()),
+                          Text("MineID: " + cars[index].price.toString()),
                         ],
                       ),
                     )
