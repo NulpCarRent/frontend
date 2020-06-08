@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/requests_list.dart';
 import 'api/api.dart';
 import 'api/car.dart';
 import 'widgets/car_list.dart';
@@ -42,6 +43,25 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => new RequestsListPage(
+                          api: widget.api,
+                        ),
+                      ));
+                },
+                child: Icon(
+                  Icons.list,
+                  size: 26.0,
+                ),
+              )),
+        ],
       ),
       body: Center(
         child: Row(
@@ -71,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       )),
                       Card(
-                        child: Padding(
+                          child: Padding(
                         padding: new EdgeInsets.all(5),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,

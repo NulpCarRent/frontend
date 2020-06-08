@@ -4,13 +4,15 @@ class Car {
     int releaseYear;
     int price;
     int renter;
+    String imageLink;
 
    Car({
         this.id,
         this.name,
         this.releaseYear,
         this.price,
-        this.renter
+        this.renter,
+        this.imageLink
     });
 
     factory Car.fromJson(Map<String, dynamic> json) => Car(
@@ -19,9 +21,7 @@ class Car {
         releaseYear: (json["release_year"]),
         price: (json["price"]),
         renter: json["renter"] ??  0,
-
-        // TODO: add image link
-        // imageLink: json["image_link"],
+        imageLink: json["picture"]
     );
 
     Map<String, dynamic> toJson() => {
@@ -29,8 +29,7 @@ class Car {
         "name": name,
         "release_year": releaseYear,
         "price": price,
-        "renter": renter
-        // TODO: add image link
-        // "image_link": imageLink,
+        "renter": renter,
+        "picture": imageLink,
     };
 }

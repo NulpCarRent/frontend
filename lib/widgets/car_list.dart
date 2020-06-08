@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:frontend/api/api.dart';
 import 'package:frontend/api/car.dart';
 import "package:frontend/config/styles.dart";
-
+import 'package:frontend/rent_page.dart';
 
 class CarList extends StatelessWidget {
   List<Car> cars;
@@ -20,43 +20,54 @@ class CarList extends StatelessWidget {
                   child: new Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // new GestureDetector(
-              //   onTap: () => Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => new DetailsPage(
-              //         worker: cars[index],
-              //       ),
-              //     ),
-              //   ),
-              //   child: 
-                new Card(
-                    child: new Column(
-                  children: <Widget>[
-                    //TODO Hardcoded image link
-                    Image.network("https://media.wired.com/photos/5d09594a62bcb0c9752779d9/125:94/w_1994,h_1500,c_limit/Transpo_G70_TA-518126.jpg"),
-                    Padding(
-                      padding: Styles.cardPadding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          // Vechile Name
-                          Padding(
-                            padding: Styles.cardHeadPadding,
-                            child: Text(
-                              cars[index].name,
-                              style: Styles.primaryCardText,
-                              textAlign: TextAlign.center,
-                            ),
+              new Card(
+                  child: new Column(
+                children: <Widget>[
+                  //TODO Hardcoded image link
+                  Image.network(
+                      "https://media.wired.com/photos/5d09594a62bcb0c9752779d9/125:94/w_1994,h_1500,c_limit/Transpo_G70_TA-518126.jpg"),
+                  Padding(
+                    padding: Styles.cardPadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        // Vechile Name
+                        Padding(
+                          padding: Styles.cardHeadPadding,
+                          child: Text(
+                            cars[index].name,
+                            style: Styles.primaryCardText,
+                            textAlign: TextAlign.center,
                           ),
-                          Text("TransportID: " +
-                              cars[index].id.toString()),
-                          Text("MineID: " + cars[index].price.toString()),
-                        ],
-                      ),
-                    )
-                  ],
-                )),
+                        ),
+                        Text("🗓 Release year: " +
+                            cars[index].releaseYear.toString()),
+                        Text("🏷 Price: \$" + cars[index].price.toString()),
+                        ButtonBar(
+                          children: <Widget>[
+                            FlatButton(
+                                child: const Text('Rent'),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => new RentPage(
+                                          car: cars[index],
+                                        ),
+                                      ));
+                                }),
+                            FlatButton(
+                              child: const Text('Remove'),
+                              color: Colors.redAccent,
+                              onPressed: null,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )),
               // )
             ],
           )));
