@@ -1,4 +1,5 @@
 # frontend
+![Flutter Web](https://github.com/NulpCarRent/frontend/workflows/Flutter%20Web/badge.svg?branch=master)
 
 A new Flutter project.
 
