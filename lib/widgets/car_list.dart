@@ -6,9 +6,10 @@ import "package:frontend/config/styles.dart";
 import 'package:frontend/rent_page.dart';
 
 class CarList extends StatelessWidget {
-  List<Car> cars;
+  final List<Car> cars;
+  final Api api;
 
-  CarList(this.cars);
+  CarList(this.cars, this.api);
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +54,7 @@ class CarList extends StatelessWidget {
                                       MaterialPageRoute(
                                         builder: (context) => new RentPage(
                                           car: cars[index],
+                                          api: api,
                                         ),
                                       ));
                                 }),

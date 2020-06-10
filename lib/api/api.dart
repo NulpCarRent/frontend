@@ -15,7 +15,7 @@ class Api{
   String transportToJson(Car data) => json.encode(data.toJson());
   String requestToJson(Request data) => json.encode(data.toJson());
 
-  Future<Data> getTransports() async {
+  Future<Data> getTransports({int min = 0 ,int max=10000000000}) async {
     final response = await http.get(car_url);
     print(car_url);
     return carsFromJson(response.body);
@@ -35,6 +35,7 @@ class Api{
 
   Future<int> postRequest(Request req) async {
     final json = req.toJson();
+    print(jsonEncode(json));
     final response = await http.post(req_url, headers: {'Content-type' : 'application/json', },  body: jsonEncode(json));
     print(response.toString());
     return response.statusCode;
