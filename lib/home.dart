@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     if (checkAvailability) {
-      dataCars = dataCars.where((car) => (car.renter != null)).toList();
+      dataCars = dataCars.where((car) => car.available).toList();
     }
 
     print(dataCars.toString());
