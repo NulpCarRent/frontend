@@ -52,9 +52,9 @@ class _RequestsListPageState extends State<RequestsListPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Text("🗓 Release year: " +
+                        Text("🗓 Rent date: " +
                             requests[index].rentDate.toString()),
-                        Text("💵 Price: \$" + requests[index].dueDate.toString()),
+                        Text("📅 Due date: " + requests[index].dueDate.toString()),
                 
                       ],
                     ),

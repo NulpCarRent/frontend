@@ -72,6 +72,7 @@ class _RentCarState extends State<RentPage> {
     req.dueDate = Jiffy(_dueDate).format("yyyy-MM-dd");
     req.car = widget.car.id;
     req.renter = 1;
+    //req.firstPayment = int.parse(_pledge);
 
     print("Request_2");
     try {
@@ -90,6 +91,7 @@ class _RentCarState extends State<RentPage> {
       } catch (e) {
         print('Error: $e');
       }
+      Navigator.pop(context);
     } else {
 
     }
@@ -118,9 +120,9 @@ class _RentCarState extends State<RentPage> {
                   MaterialButton(
                     color: Colors.green,
                     onPressed: () => {
-                      print("Request"),
-                      _validateAndSubmit()
-                    }
+                      _validateAndSubmit(),
+                    },
+                    child: Text("Request"),
                     )
                 ],
               ),
@@ -143,7 +145,7 @@ class _RentCarState extends State<RentPage> {
               Icons.money_off,
               color: Colors.grey,
             )),
-        onSaved: (value) => _totalSum = value.trim(),
+        onSaved: (value) => _pledge = value.trim(),
       ),
     );
   }

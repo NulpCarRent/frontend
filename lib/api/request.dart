@@ -4,6 +4,7 @@ class Request {
     String dueDate;
     int renter;
     int car;
+    int firstPayment;
 
    Request({
         this.id,
@@ -11,6 +12,7 @@ class Request {
         this.dueDate,
         this.renter,
         this.car,
+        this.firstPayment
     });
 
     factory Request.fromJson(Map<String, dynamic> json) => Request(
@@ -18,13 +20,15 @@ class Request {
         rentDate: json["rent_date"],
         dueDate: (json["due_date"]),
         renter: (json["renter"]),
-        car: json["auto"] ??  0
+        car: json["auto"] ??  0,
+        firstPayment: json["first_payment"]
     );
 
     Map<String, dynamic> toJson() => {
         "rent_date": rentDate,
         "due_date": dueDate,
         "renter": renter,
-        "auto": car
+        "auto": car,
+        "first_payment": firstPayment
     };
 }
