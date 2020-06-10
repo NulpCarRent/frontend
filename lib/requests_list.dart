@@ -54,7 +54,7 @@ class _RequestsListPageState extends State<RequestsListPage> {
                       children: <Widget>[
                         Text("🗓 Release year: " +
                             requests[index].rentDate.toString()),
-                        Text("🗓 Price: \$" + requests[index].dueDate.toString()),
+                        Text("💵 Price: \$" + requests[index].dueDate.toString()),
                 
                       ],
                     ),

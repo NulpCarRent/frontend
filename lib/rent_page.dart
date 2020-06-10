@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/api/car.dart';
+import 'package:frontend/api/request.dart';
 import 'package:frontend/config/strings.dart';
 import 'package:frontend/config/styles.dart';
+import 'package:jiffy/jiffy.dart';
+
+import 'api/api.dart';
 
 class RentPage extends StatefulWidget {
-  Car car;
-  RentPage({Key key, this.car}) : super(key: key);
+  final Car car;
+  final Api api;
+  RentPage({Key key, this.car, this.api}) : super(key: key);
 
   @override
   _RentCarState createState() => _RentCarState();
@@ -14,9 +19,12 @@ class RentPage extends StatefulWidget {
 class _RentCarState extends State<RentPage> {
   //Init key for working with form
   final _formKey = new GlobalKey<FormState>();
+  TextEditingController _startDateController = TextEditingController();
+  TextEditingController _dueDateController = TextEditingController();
 
-  String _rentDate;
-  String _dueDate;
+  DateTime _rentDate = DateTime.now();
+  DateTime _dueDate = DateTime.now();
+  String _pledge;
   String _totalSum;
 
   // Check if form is valid
@@ -29,11 +37,56 @@ class _RentCarState extends State<RentPage> {
     return false;
   }
 
+  Future<Null> _selectDueDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _dueDate,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != _dueDate)
+      setState(() {
+        _dueDate = picked;
+        _dueDateController.text = picked.toIso8601String();
+      });
+  }
+
+    Future<Null> _selectStartDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _rentDate,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != _rentDate)
+      setState(() {
+        _rentDate = picked;
+        _startDateController.text = picked.toIso8601String();
+      });
+  }
+
+  
+  Future<void> _postRequest() async {
+
+    Request req = new Request();
+
+    req.rentDate = Jiffy(_rentDate).format("yyyy-MM-dd");;
+    req.dueDate = Jiffy(_dueDate).format("yyyy-MM-dd");
+    req.car = widget.car.id;
+    req.renter = 1;
+
+    print("Request_2");
+    try {
+      int result = await widget.api.postRequest(req);
+      print(result);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   // Perform login or signup
   void _validateAndSubmit() async {
     if (_validateAndSave()) {
       try {
-        // userId = await _getUserId();
+        _postRequest();
       } catch (e) {
         print('Error: $e');
       }
@@ -43,12 +96,13 @@ class _RentCarState extends State<RentPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
         appBar: AppBar(
           title: Text(Strings.detailsPageTitle),
         ),
         body: new Container(
+            padding: new EdgeInsets.fromLTRB(70, 10, 70, 10),
             child: new Center(
                 child: new Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -60,7 +114,14 @@ class _RentCarState extends State<RentPage> {
                 children: <Widget>[
                   _showRentDateInput(),
                   _showDueDateInput(),
-                  _showTotalInput()
+                  _showPledgeInput(),
+                  MaterialButton(
+                    color: Colors.green,
+                    onPressed: () => {
+                      print("Request"),
+                      _validateAndSubmit()
+                    }
+                    )
                 ],
               ),
             )
@@ -68,7 +129,7 @@ class _RentCarState extends State<RentPage> {
         ))));
   }
 
-  Widget _showTotalInput() {
+  Widget _showPledgeInput() {
     return Padding(
       padding: Styles.inputFormPadding,
       child: new TextFormField(
@@ -77,9 +138,9 @@ class _RentCarState extends State<RentPage> {
         autofocus: false,
         keyboardType: TextInputType.number,
         decoration: new InputDecoration(
-            hintText: Strings.hintPhone,
+            hintText: Strings.hintPledge,
             icon: new Icon(
-              Icons.check,
+              Icons.money_off,
               color: Colors.grey,
             )),
         onSaved: (value) => _totalSum = value.trim(),
@@ -96,13 +157,14 @@ class _RentCarState extends State<RentPage> {
         obscureText: false,
         autofocus: false,
         keyboardType: TextInputType.datetime,
+        controller: this._startDateController,
         decoration: new InputDecoration(
-            hintText: Strings.hintPhone,
+            hintText: Strings.hintRentDate,
             icon: new Icon(
               Icons.date_range,
               color: Colors.grey,
             )),
-        onSaved: (value) => _rentDate = value.trim(),
+        onTap: () => _selectStartDate(context)
       ),
     );
   }
@@ -115,13 +177,14 @@ class _RentCarState extends State<RentPage> {
         obscureText: false,
         autofocus: false,
         keyboardType: TextInputType.datetime,
+        controller: this._dueDateController,
         decoration: new InputDecoration(
-            hintText: Strings.hintPhone,
+            hintText: Strings.hintDueDate,
             icon: new Icon(
               Icons.date_range,
               color: Colors.grey,
             )),
-        onSaved: (value) => _dueDate = value.trim(),
+        onTap: () => _selectDueDate(context),
       ),
     );
   }
@@ -134,8 +197,9 @@ class _RentCarState extends State<RentPage> {
           minWidth: 200.0,
           height: 42.0,
           color: Colors.blue,
-          child: new Text(Strings.loginText, style: Styles.primaryText),
+          child: new Text(Strings.rentText, style: Styles.primaryText),
           onPressed: _validateAndSubmit,
-        ));
+        ),
+        );
   }
 }

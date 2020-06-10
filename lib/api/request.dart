@@ -1,7 +1,7 @@
 class Request {
     int id;
-    DateTime rentDate;
-    DateTime dueDate;
+    String rentDate;
+    String dueDate;
     int renter;
     int car;
 
@@ -22,7 +22,6 @@ class Request {
     );
 
     Map<String, dynamic> toJson() => {
-        "id": id,
         "rent_date": rentDate,
         "due_date": dueDate,
         "renter": renter,

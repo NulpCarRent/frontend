@@ -5,7 +5,10 @@ abstract class Strings {
    static const String hintEmail = "Email";		
    static const String hintPassword = "Password";		
    static const String hintName = 'Name';
+   static const String hintPledge = 'Enter the pledge for a car';
    static const String hintPhone = 'Phone';
+   static const String hintDueDate = 'Due date';
+   static const String hintRentDate = 'Rent date';
    static const String errorEmptyPassword = 'Password can\'t be empty';		
    static const String errorEmptyEmail = 'Email can\'t be empty';		
    static const String errorShortPassword = 'Password is too short';		
@@ -14,6 +17,7 @@ abstract class Strings {
    static const String errorFormat = 'Bad format';
    static const String createAccountText = 'Create an account';		
    static const String signinText = 'Have an account? Sign in';		
+   static const String rentText = "Rent a car";		
    static const String errorEmptyName = 'Name can\'t be empty';		
    static const String loginText = 'Login';
    static const String detailsPageTitle = 'Transport details';

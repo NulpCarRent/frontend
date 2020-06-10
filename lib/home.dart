@@ -15,20 +15,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  RangeValues _values = RangeValues(0.3, 0.7);
   List<Car> cars = [];
+  Map filters = {"min": null, "max": null, "check_availability": false};
+  bool checkAvailability = false;
+  double _minPrice = 0;
+  double _maxPrice = 1000000;
 
   Future<void> _updateList() async {
     Data data;
+    List<Car> dataCars = [];
     //Get data from
     try {
-      data = await widget.api.getTransports();
-      print(data.cars);
+      data = await widget.api.getTransports(max: _maxPrice.toInt(), min: _minPrice.toInt());
+      dataCars = data.cars;
     } catch (e) {
+      print("ERROR");
       print(e.toString());
     }
+
+    if (checkAvailability) {
+      dataCars = dataCars.where((car) => (car.renter != null)).toList();
+    }
+
+    print(dataCars.toString());
     setState(() {
-      cars = data.cars;
+      this.cars = dataCars;
     });
   }
 
@@ -81,11 +92,29 @@ class _HomePageState extends State<HomePage> {
                           mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
                             Text("Price range"),
-                            RangeSlider(
-                              min: 0,
-                              max: 1,
-                              values: _values,
-                              onChanged: (RangeValues value) {},
+                            SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                showValueIndicator: ShowValueIndicator.always
+                              ),
+                              child: RangeSlider(
+                                min: 0,
+                                max: 1000000,
+                                divisions: 20,
+                                values: RangeValues(
+                                    this._minPrice, this._maxPrice),
+                                labels: RangeLabels('$_minPrice', '$_maxPrice'),
+                                onChanged: (RangeValues value) {
+                                  setState(() {
+                                    _minPrice = value.start.roundToDouble();
+                                    _maxPrice = value.end.roundToDouble();
+                                  });
+                                },
+                              ),
+                            ),
+                            RaisedButton(
+                              onPressed: () => _updateList(),
+                              color: Colors.green,
+                              child: Text("Filter"),
                             )
                           ],
                         ),
@@ -98,7 +127,15 @@ class _HomePageState extends State<HomePage> {
                           children: <Widget>[
                             Row(
                               children: [
-                                Checkbox(value: true),
+                                Checkbox(
+                                  value: checkAvailability,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      checkAvailability = value;
+                                    });
+                                    _updateList();
+                                  },
+                                ),
                                 Text("Only available cars")
                               ],
                             )
@@ -110,7 +147,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               flex: 8,
-              child: CarList(cars),
+              child: CarList(cars, widget.api),
             ),
           ],
         ),
