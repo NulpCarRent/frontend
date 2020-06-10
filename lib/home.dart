@@ -18,22 +18,23 @@ class _HomePageState extends State<HomePage> {
   List<Car> cars = [];
   Map filters = {"min": null, "max": null, "check_availability": false};
   bool checkAvailability = false;
-  double _min_price = 0;
-  double _max_price = 100000;
+  double _minPrice = 0;
+  double _maxPrice = 1000000;
 
   Future<void> _updateList() async {
     Data data;
     List<Car> dataCars = [];
     //Get data from
     try {
-      data = await widget.api.getTransports();
+      data = await widget.api.getTransports(max: _maxPrice.toInt(), min: _minPrice.toInt());
       dataCars = data.cars;
     } catch (e) {
+      print("ERROR");
       print(e.toString());
     }
 
     if (checkAvailability) {
-      dataCars = dataCars.where((car) => (car.renter == null)).toList();
+      dataCars = dataCars.where((car) => (car.renter != null)).toList();
     }
 
     print(dataCars.toString());
@@ -98,16 +99,22 @@ class _HomePageState extends State<HomePage> {
                               child: RangeSlider(
                                 min: 0,
                                 max: 1000000,
+                                divisions: 20,
                                 values: RangeValues(
-                                    this._min_price, this._max_price),
-                                labels: RangeLabels('$_min_price', '$_max_price'),
+                                    this._minPrice, this._maxPrice),
+                                labels: RangeLabels('$_minPrice', '$_maxPrice'),
                                 onChanged: (RangeValues value) {
                                   setState(() {
-                                    _min_price = value.start.roundToDouble();
-                                    _max_price = value.end.roundToDouble();
+                                    _minPrice = value.start.roundToDouble();
+                                    _maxPrice = value.end.roundToDouble();
                                   });
                                 },
                               ),
+                            ),
+                            RaisedButton(
+                              onPressed: () => _updateList(),
+                              color: Colors.green,
+                              child: Text("Filter"),
                             )
                           ],
                         ),

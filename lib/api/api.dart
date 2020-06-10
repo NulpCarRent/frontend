@@ -16,8 +16,8 @@ class Api{
   String requestToJson(Request data) => json.encode(data.toJson());
 
   Future<Data> getTransports({int min = 0 ,int max=10000000000}) async {
-    final response = await http.get(car_url);
-    print(car_url);
+    final response = await http.get(car_url+"?price_min=$min&price_max=$max");
+    print(car_url+"price_min=$min&price_max=$max");
     return carsFromJson(response.body);
   }
 
